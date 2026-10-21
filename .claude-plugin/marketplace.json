@@ -5,7 +5,7 @@
     {
       "name": "lior-skills",
       "source": "./",
-      "description": "Agent skills by Lior Pesoa. First up: design-crit, a design critique of rendered web and iOS screens with an annotated crit page.",
+      "description": "Agent skills by Lior Pesoa: design-crit (a design critique of rendered web and iOS screens with an annotated crit page) and ugc-video (UGC video ads with an AI avatar over real screen recordings).",
       "version": "0.1.0"
     }
   ]

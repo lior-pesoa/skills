@@ -1,0 +1,160 @@
+<!doctype html>
+<!--
+  UGC composition template (HyperFrames, 1080x1920).
+  The avatar stands cut out at the bottom-left; screen recordings fill the frame behind.
+  Edit the parts marked EDIT. Layout numbers and why they are what they are: references/composition.md.
+-->
+<html lang="en" data-composition-variables='[{"id":"captions","type":"boolean","label":"Show word captions","default":false}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>UGC video</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* EDIT: the project's brand. Fonts go in fonts/ and get an @font-face each. */
+      :root {
+        --accent: #ffe45c;      /* caption highlight, CTA button */
+        --ink: #101418;         /* borders, text on light */
+        --paper: #fffdf6;       /* chips, light fills */
+        --end-bg: #098eff;      /* end card */
+        --font-display: system-ui, sans-serif;
+        --font-body: system-ui, sans-serif;
+        --font-mono: ui-monospace, monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--paper); font-family: var(--font-body); color: var(--ink); }
+
+      /* Screens fill the frame; #pan moves them so what matters sits above the avatar. */
+      #screen { position: absolute; inset: 0; overflow: hidden; background: #ffffff; }
+      #pan { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #pan video { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+
+      /* Small source labels, just under the platform's top UI. */
+      .tag {
+        position: absolute; left: 40px; top: 270px; z-index: 5;
+        font-family: var(--font-mono); font-weight: 700; font-size: 26px; letter-spacing: 0.06em;
+        text-transform: uppercase; padding: 10px 18px 8px; border: 4px solid var(--ink); border-radius: 8px;
+        background: var(--paper); box-shadow: 6px 6px 0 var(--ink);
+      }
+
+      /* The avatar, cut out, standing on the bottom-left edge. Face stays above the bottom 420px. */
+      #cam {
+        position: absolute; left: -50px; bottom: 0; width: 560px; height: 996px; z-index: 6;
+        filter: drop-shadow(0 10px 28px rgba(16, 20, 24, 0.35));
+      }
+      #cam video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+
+      /* Word captions to the avatar's right, clear of the right-hand action buttons. */
+      #caps { position: absolute; left: 540px; width: 420px; bottom: 440px; z-index: 7; }
+      .grp { position: absolute; left: 0; bottom: 0; width: 100%; display: flex; flex-wrap: wrap; gap: 6px 10px; opacity: 0; }
+      .w {
+        font-weight: 800; font-size: 60px; line-height: 1; padding: 8px 12px 10px; border-radius: 10px;
+        background: var(--paper); border: 4px solid var(--ink); box-shadow: 5px 5px 0 var(--ink);
+      }
+
+      /* End card, behind the avatar. Content stays in the top half so the avatar never covers it. */
+      #end { position: absolute; inset: 0; background: var(--end-bg); z-index: 4; }
+      #end-inner { position: absolute; left: 72px; top: 270px; width: 936px; display: flex; flex-direction: column; align-items: flex-start; }
+      #end-logo { width: 320px; height: auto; display: block; }
+      #end h1 { margin-top: 28px; font-family: var(--font-display); font-size: 72px; line-height: 1.04; color: #ffffff; }
+      #end-cta {
+        margin-top: 32px; display: block; background: var(--accent); color: var(--ink); font-weight: 800; font-size: 44px;
+        padding: 22px 40px; border: 6px solid var(--ink); border-radius: 999px; box-shadow: 10px 10px 0 var(--ink);
+      }
+      #end-small { margin-top: 24px; font-family: var(--font-mono); font-weight: 700; font-size: 32px; color: #ffffff; }
+    </style>
+  </head>
+  <body>
+    <!-- EDIT: data-duration = avatar length + about 0.8s. -->
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="24.4">
+      <div id="screen">
+        <div id="pan" data-layout-allow-overflow>
+          <!-- EDIT: one <video> per beat, back to back on track 0. Timing lives on the video, never on #pan.
+               data-start / data-duration: when it shows (from the avatar's word timings).
+               data-media-start: where in the recording to start. data-playback-rate: speed up long stretches. -->
+          <video id="v1" src="assets/screen-a.mp4" muted playsinline data-start="0" data-duration="6.4" data-media-start="0" data-track-index="0"></video>
+          <video id="v2" src="assets/screen-b.mp4" muted playsinline data-start="6.4" data-duration="7.6" data-media-start="2" data-playback-rate="1.4" data-track-index="0"></video>
+          <video id="v3" src="assets/screen-c.mp4" muted playsinline data-start="14" data-duration="6.8" data-media-start="0" data-playback-rate="2" data-track-index="0"></video>
+        </div>
+      </div>
+
+      <!-- EDIT: one label per source app, or delete. -->
+      <div id="tag-a" class="tag clip" data-start="0" data-duration="14" data-track-index="2"><span>Source app</span></div>
+      <div id="tag-b" class="tag clip" data-start="14" data-duration="6.8" data-track-index="2"><span>yourproduct.com</span></div>
+
+      <section id="end" class="clip" data-start="20.8" data-duration="3.6" data-track-index="3">
+        <div id="end-inner">
+          <img id="end-logo" src="assets/logo.svg" alt="" />
+          <h1>EDIT: the question your viewer should ask themselves</h1>
+          <span id="end-cta">EDIT: the button text from your site</span>
+          <p id="end-small">EDIT: Free · no card · yourproduct.com</p>
+        </div>
+      </section>
+
+      <div id="cam">
+        <video id="avatar" src="assets/avatar-cutout.webm" muted playsinline data-start="0" data-duration="23.6" data-track-index="1"></video>
+      </div>
+      <audio id="voice" src="assets/avatar-voice.m4a" data-start="0" data-duration="23.6" data-track-index="4" data-volume="1"></audio>
+
+      <div id="caps"></div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // EDIT: paste W, GROUPS and CAP_END from scripts/caption-groups.py.
+      const W = [[0.05, "Example"], [0.4, "words."]];
+      const GROUPS = [0];
+      const CAP_END = 1;
+
+      const { captions } = window.__hyperframes.getVariables();
+      if (captions === true || captions === "true") {
+        const caps = document.getElementById("caps");
+        const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+        GROUPS.forEach((first, g) => {
+          const last = (GROUPS[g + 1] ?? W.length) - 1;
+          const el = document.createElement("div");
+          el.className = "grp";
+          for (let i = first; i <= last; i++) {
+            const s = document.createElement("span");
+            s.className = "w";
+            s.id = `w${i}`;
+            s.textContent = W[i][1];
+            el.appendChild(s);
+          }
+          caps.appendChild(el);
+          const start = W[first][0];
+          const end = g + 1 < GROUPS.length ? W[GROUPS[g + 1]][0] : CAP_END;
+          tl.fromTo(el, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.12, ease: "power2.out" }, start);
+          tl.set(el, { opacity: 0 }, end);
+          for (let i = first; i <= last; i++) tl.set(`#w${i}`, { backgroundColor: accent }, W[i][0]);
+        });
+      }
+
+      // EDIT: where the screen sits in each beat. Negative y lifts the footage so its key
+      // content sits between y=300 and y=900, clear of the avatar.
+      tl.set("#pan", { y: -260 }, 0);
+      tl.to("#pan", { y: 0, duration: 0.4, ease: "power2.inOut" }, 4.3);
+      // A lifted screen leaves a strip at the bottom: fill it with that screen's own color.
+      tl.set("#screen", { backgroundColor: "#ffffff" }, 0);
+
+      // A small punch on each cut keeps the screen alive. EDIT: the cut times.
+      [6.4, 14].forEach((t) => {
+        tl.fromTo("#screen", { scale: 1.03 }, { scale: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, t);
+      });
+
+      // The avatar rises in, and leaves after the last word.
+      tl.fromTo("#cam", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 0);
+      tl.to("#cam", { opacity: 0, y: 60, duration: 0.25, ease: "power2.in" }, 23.6);
+
+      // End card. EDIT: start times follow the end card's data-start.
+      tl.fromTo("#end-logo", { scale: 0.6, rotation: -12, opacity: 0 }, { scale: 1, rotation: -4, opacity: 1, duration: 0.5, ease: "back.out(1.8)" }, 20.85);
+      tl.fromTo("#end h1", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 21.05);
+      tl.fromTo("#end-cta", { y: 30, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 21.3);
+      tl.fromTo("#end-small", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 21.6);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

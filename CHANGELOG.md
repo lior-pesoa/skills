@@ -1,5 +1,16 @@
 # Changelog
 
+## ugc-video 0.1.0 · 2026-10-21
+
+First release, built from making a real Instagram ad end to end.
+
+- Script rules: hook types to test, honesty rules for AI presenters, slop check.
+- Avatar character, prompt template, settings and voice-consistency plan for OpenArt-style tools.
+- `clip-report.py`: per-segment transcripts, added or dropped words, pauses, framing sheet, draft cut list.
+- `build-avatar.py`: joins clips, cuts pauses, crops to match framing, speeds up, normalizes loudness.
+- `caption-groups.py`: caption phrases from word timings.
+- HyperFrames template: cut-out avatar at the bottom-left over full-bleed screen recordings, safe zones, labels, end card, optional word captions.
+
 ## design-crit 0.1.0 — 2026-10-21
 
 First release.
