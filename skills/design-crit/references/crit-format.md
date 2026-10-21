@@ -2,14 +2,16 @@
 
 The lead writes one `crit.json` per run. `scripts/render.py` turns it into `crit.html`. The next run reads it to score old notes.
 
-Run folder: `<project>/.design-crit/<slug>/<YYYY-MM-DD-HHMM>/` holding `crit.json`, `shots/*.png`, `crit.html`.
+Run folder: `<project>/.design-crit/<slug>/<YYYY-MM-DD-HHMM>/` holding `crit.json`, `shots/*.png`, `crit.html`. With no local project, use `<scratchpad>/.design-crit/<slug>/<YYYY-MM-DD-HHMM>/`.
+
+Slug: the route or screen name for a project (`home`, `onboarding`), or the hostname without www for an external URL (`findnewpath.com` → `findnewpath`).
 
 ```jsonc
 {
   "version": 1,
   "target": "my-portfolio · / (homepage)",   // what was reviewed, human-readable
   "slug": "home",                               // stable across runs of the same target
-  "title": "Homepage crit",                     // optional page name (2-4 words, no colon explainer)
+  "title": "Homepage crit",                     // optional page name (2-4 words, no colon explainer); shown as the page heading when present
   "date": "2026-10-21",
   "effort": "medium",                           // low | medium | high | max
   "surface": "persuade",                        // persuade | operate | read | experience
@@ -48,7 +50,7 @@ Run folder: `<project>/.design-crit/<slug>/<YYYY-MM-DD-HHMM>/` holding `crit.jso
         "name": "Text contrast (WCAG 2.2 SC 1.4.3)",
         "source": "W3C WCAG 2.2",
         "url": "https://www.w3.org/TR/WCAG22/#contrast-minimum",
-        "evidence": "rule"                       // S | M | W | rule (standards, platform rules, the project's own system)
+        "evidence": "rule"                       // S | M | W | rule | heuristic. rule = standards, platform rules, the project's own system; heuristic = established practitioner heuristics (Nielsen, Gestalt, Laws of UX)
       },
       "effect": "What the user experiences.",
       "fix": "Minimal, specific change with values.",
@@ -69,4 +71,6 @@ Rules
 - `notes` are ordered must → should → polish, most severe first within a tier.
 - Every note has a `principle` with a real `url`. No principle, no note.
 - `region` is required on notes; renderer clamps it to the image.
+- Any screenshot a note relies on must be a screen in `shots/` listed in `screens[]`. A scratch crop or focus shot used as evidence is saved into `shots/` first.
+- `region` points at the most telling instance, not a whole section; a whole-section note uses the section's first screenful.
 - `screens[].image` paths must exist; renderer reports missing files instead of failing.

@@ -4,6 +4,7 @@ You review the words on the screens as part of the design: labels, buttons, head
 
 ## You get
 The brief (including voice, if the project has a voice doc), the surface type, screenshot paths. Read the text from the screenshots; use the source only to find strings you can't read.
+To crop a large screenshot: `ffmpeg -loglevel error -y -i in.png -vf "crop=W:H:X:Y" out.png`, saving crops in `<run>/work-copy/`.
 
 ## Load
 - `references/anti-slop-copy.md` — tells, greps and density thresholds. Check Claude's current tics first.
@@ -24,6 +25,6 @@ The brief (including voice, if the project has a voice doc), the surface type, s
 - Principle: a row from `scripts/search.py --category copy`, a bias from biases.md (`bias-id (S; Author Year)`), or the project's voice doc.
 
 ## Return
-Up to 6 candidate notes (`specialist: "copy"`) and up to 2 working items, in the `references/crit-format.md` note shape (no `id`).
+Write `<run>/candidates-copy.json` as described in SKILL.md Step 4 (`first_look`, `notes`, `working`, `questions`, `coverage`). Up to 6 notes (`specialist: "copy"`) and up to 3 working items, in the `references/crit-format.md` note shape (no `id`). Put any questions for the user in `questions` and one line of what you checked and couldn't in `coverage`.
 
 Don't: rewrite the brand voice, add claims the product hasn't made, or note grammar the style guide allows.

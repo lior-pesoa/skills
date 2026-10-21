@@ -154,11 +154,12 @@ def missing_box(rel, ratio=None):
         style, esc(rel or "(no path)"))
 
 
-def view(img, width, height, region=None, tier=None, label="", marker=None, cap=480, scale=None):
+def view(img, width, height, region=None, tier=None, label="", marker=None, cap=480, scale=None, top=None):
     """A cropped (or full) view of an image as a CSS-scaled background.
 
     region is in image pixels; the view shows it plus ~24px-equivalent padding,
     outlined, with an optional numbered marker at its top-left corner.
+    top (image pixels), without region: show only the full-width top strip of that height.
     """
     if not img["exists"]:
         return missing_box(img["rel"])
@@ -172,6 +173,8 @@ def view(img, width, height, region=None, tier=None, label="", marker=None, cap=
         if ch < min_h:
             cy = max(0, min(height - min_h, y + h / 2 - min_h / 2))
             ch = min_h
+    elif top:
+        cx, cy, cw, ch = 0, 0, width, max(1, min(height, top))
     else:
         cx, cy, cw, ch = 0, 0, width, height
     pos_x = cx / (width - cw) * 100 if width > cw else 0
@@ -260,8 +263,9 @@ def render(data, base, inline, fragment=False):
     if degraded:
         add('<div class="degraded" role="note"><strong>Degraded run.</strong> %s</div>' % esc(degraded))
     add('<header class="head">')
-    add('<h1>%s</h1>' % esc(data.get("target")))
-    meta = [("Date", data.get("date")), ("Effort", data.get("effort")),
+    add('<h1>%s</h1>' % esc(data.get("title") or data.get("target")))
+    meta = [("Target", data.get("target") if data.get("title") else None),
+            ("Date", data.get("date")), ("Effort", data.get("effort")),
             ("Surface", data.get("surface")), ("Method", data.get("method"))]
     add('<dl class="meta">%s</dl>' % "".join(
         '<div><dt>%s</dt><dd>%s</dd></div>' % (k, esc(v)) for k, v in meta if v))
@@ -297,10 +301,20 @@ def render(data, base, inline, fragment=False):
         for w in working:
             scr = screens.get(str(w.get("screen")))
             media = ""
+            label = "%s, %s" % (scr["label"], w.get("title") or "") if scr else ""
             if scr and isinstance(w.get("region"), dict):
                 media = '<div class="working-media">%s</div>' % view(
                     scr["img"], scr["w"], scr["h"], clamp_region(w["region"], scr["w"], scr["h"]),
-                    label="%s, %s" % (scr["label"], w.get("title") or ""), cap=200, scale=scr["scale"])
+                    label=label, cap=200, scale=scr["scale"])
+            elif scr:
+                # No region: the whole screen would be an unreadable thumbnail, so show its top.
+                # A full-page desktop capture is tall, but its viewport is wide: judge by CSS width too.
+                tw, sc = scr["w"], scr["scale"]
+                css_w = tw / sc if isinstance(sc, (int, float)) and sc > 0 else tw
+                wide = tw >= scr["h"] * 0.6 or css_w >= 768
+                th = min(scr["h"], tw * 0.75 if wide else tw * 1.4)
+                media = '<div class="working-media">%s<span class="label" style="display:block;margin-top:6px;font-size:13px">Top of screen</span></div>' % view(
+                    scr["img"], scr["w"], scr["h"], top=th, label=label + ", top of screen", cap=200)
             add('<li class="%s">%s<div><h3>%s</h3><p>%s</p></div></li>' % (
                 "has-media" if media else "", media, esc(w.get("title")), rich(w.get("why"))))
         add('</ul></section>')

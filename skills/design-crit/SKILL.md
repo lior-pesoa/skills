@@ -24,7 +24,7 @@ Read this file fully, then load only the references each step names.
 ## Hard rules
 
 1. **No authority, no note.** Every note cites a principle from `references/rules.csv` (find it with `scripts/search.py`), a pattern, a bias from `references/biases.md`, the project's own design docs, or a measurement. If nothing backs it, it isn't a note.
-2. **The brief wins.** Never flag what PRODUCT.md, DESIGN.md or the user's stated direction asks for. A tell the brief earns is not a tell.
+2. **The brief wins.** Never flag what PRODUCT.md, DESIGN.md or the user's stated direction asks for. A tell the brief earns is not a tell. Exception: a measured WCAG AA failure on content people need to read or operate beats the brief. Purely decorative elements (aria-hidden, no information) are exempt, as WCAG allows. For everything else, the brief wins.
 3. **Judge what was rendered**, not what the code intends. No screenshot, no visual note.
 4. **Say "reads generic", never "AI-written".**
 5. **Specific fixes only.** Values, not adjectives: "raise the H1 to 44px and drop the subtitle to 400 weight", not "improve hierarchy".
@@ -46,7 +46,7 @@ No docs? Infer the brief from the product itself and mark `brief_source: "inferr
 
 ## Step 2 — Capture
 
-Load `references/capture.md` and follow the web or iOS procedure. Save into the run folder (`<project>/.design-crit/<slug>/<YYYY-MM-DD-HHMM>/shots/`). Default set at `medium`: phone and desktop (web) or the device's default size (iOS), light and dark, plus the states listed in capture.md.
+Load `references/capture.md` and follow the web or iOS procedure. Save into the run folder (`<project>/.design-crit/<slug>/<YYYY-MM-DD-HHMM>/shots/`). The slug is the route or screen name for a project (`home`, `onboarding`), or the hostname without www for an external URL (`findnewpath.com` → `findnewpath`). With no local project (an external URL), the run folder goes in the session scratchpad: `<scratchpad>/.design-crit/<slug>/<YYYY-MM-DD-HHMM>/`. Default set at `medium`: phone and desktop (web) or the device's default size (iOS), light and dark, plus the states listed in capture.md. You capture the screenshots, visual states and measurements; the a11y specialist owns the keyboard and focus pass (it drives the page itself, see `specialists/a11y.md`).
 
 **Capture gate.** Look at every screenshot before using it. Blank, black, half-loaded, cookie-banner-covered, wrong screen, or wrong size → recapture once; if it still fails, drop it and list it under `not_captured`. An empty area where content clearly belongs (an image slot, an art panel, a chart) is a capture failure until proven otherwise: check the source for the asset and recapture after scrolling before treating it as a design problem.
 
@@ -66,7 +66,14 @@ Run each specialist as a separate subagent when the Agent tool is available (in 
 | a11y | `specialists/a11y.md` | measured contrast, targets, text size, labels, focus, Dynamic Type |
 | copy | `specialists/copy.md` | labels, CTAs, errors, empty states, framing, copy slop |
 
-Each writes its result to `<run>/candidates-<specialist>.json` (`{"notes": [...], "working": [...], "questions": [...], "coverage": "..."}`; up to 6 notes in the `crit-format.md` note shape without `id`, up to 3 working items) and keeps scratch crops in `<run>/work-<specialist>/`. Tell them the exact file path.
+Each writes its result to `<run>/candidates-<specialist>.json` and keeps scratch crops in `<run>/work-<specialist>/`. Tell them the exact file path. The file has exactly these fields:
+- `first_look`: string, the specialist's own first-look lines (visual fills it; others may leave it empty).
+- `notes`: up to 6, in the `crit-format.md` note shape without `id`.
+- `working`: up to 3 items.
+- `questions`: array of `{"q", "about": "<title of the note it refers to>", "options": [...]}`. The director converts `about` to a 1-based `note` index.
+- `coverage`: string, what the specialist checked and couldn't. You build `crit.json`'s `coverage` object from these strings.
+
+Any screenshot a note relies on must be a screen in `shots/` listed in `screens[]`. If a specialist's evidence is a scratch crop or a focus shot, it saves it into `shots/` and says so. Regions point at the most telling instance, not a whole section; a whole-section note uses the section's first screenful.
 
 ## Step 5 — Director pass
 
@@ -80,16 +87,16 @@ Load `specialists/director.md` and run it as one fresh subagent (or yourself, se
 4. Deliver the page:
    - If the Artifact tool is available, render again with `--fragment` (the host adds its own document skeleton), publish that file with its `shots/` as supporting files, and give the link.
    - Otherwise tell the user the local path to `crit.html`.
-5. In chat: one line on the overall read, the counts (Must / Should / Polish), the link or path. Then the questions (2–4, each tied to a note, each with concrete options) as the last thing in the message. Nothing after the questions.
+5. In chat: one line on the overall read, the counts (Must / Should / Polish), the link or path. Then the questions (2–4, each tied to a note, each with concrete options) as the last thing in the message. Nothing after the questions. If you're running as a subagent, put the summary and questions in your final report instead.
 
 ## Effort
 
-| Level | Screens | Captures | Specialists | Director | Max notes |
+| Level | Screens | Captures | Specialists | Director | Max notes: Must+Should (+Polish) |
 |---|---|---|---|---|---|
-| low | 1 | 1 size, light | inline, visual + copy | inline self-check | 4 |
-| medium | touched screens | phone + desktop, light + dark, key states | visual, a11y, copy | yes | 8 |
-| high | the whole flow | + all states, 200% zoom / largest Dynamic Type | all | yes | 12 |
-| max | the whole flow | as high | all + comparison with 2–3 strong products in the category (named, captured, cited) | yes | 15 |
+| low | 1 | 1 size, light | inline, visual + copy | inline self-check | 4 total |
+| medium | touched screens | phone + desktop, light + dark, key states | visual, a11y, copy | yes | 8 (+2 Polish) |
+| high | the whole flow | + all states, 200% zoom / largest Dynamic Type | all | yes | 12 (+3 Polish) |
+| max | the whole flow | as high | all + comparison with 2–3 strong products in the category (named, captured, cited) | yes | 15 (+3 Polish) |
 
 ## Never notes
 

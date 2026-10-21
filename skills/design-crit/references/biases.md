@@ -17,6 +17,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 ## Biases
 
 ### `framing-effect` — S
+- Source: https://doi.org/10.1126/science.7455683
 - What: the same facts choose differently depending on how they are put.
 - In UI: "Data saver" instead of "Lower quality".
 - In copy: Bad: "Churn fell from 85% to 80%" → better: "Retention rose from 15% to 20%" (same facts; pick the frame the user cares about, never one that hides the number).
@@ -24,6 +25,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Tversky & Kahneman 1981; Many Labs 2014 replicated it at about half the size.
 
 ### `anchoring` — S
+- Source: https://doi.org/10.1126/science.185.4157.1124
 - What: a first number shifts later judgments.
 - In UI: annual price next to monthly price.
 - In copy: Bad: "$29/mo" → better: "$29/mo (vs $49 billed monthly)".
@@ -31,6 +33,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Tversky & Kahneman 1974; 2024 meta-analysis g≈0.83 across 2,601 effects.
 
 ### `precise-anchor` — M to S
+- Source: https://doi.org/10.1111/j.1467-9280.2008.02057.x
 - What: a precise number reads as better grounded than a round one.
 - In UI: a stat line with source and sample size.
 - In copy: Bad: "Saves hours" → better: "Saves 3.5 hrs/week (median, 2,140 teams)".
@@ -38,6 +41,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Janiszewski & Uy 2008.
 
 ### `loss-aversion` — S/M
+- Source: https://www.aeaweb.org/doi/10.1257/jel.20221698
 - What: losses weigh more than equal gains.
 - In UI: Gmail storage warning.
 - In copy: "You'll lose 3 saved drafts" (only for real, specific, user-owned losses).
@@ -45,6 +49,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: JEL 2024 meta-analysis λ≈1.96; Walasek 2018 ≈1.31; Gal & Rucker 2018 (U) disputes the effect.
 
 ### `default-effect` — S, heterogeneous
+- Source: https://ideas.repec.org/a/cup/bpubpo/v3y2019i02p159-186_00.html
 - What: people stay with the preselected option.
 - In UI: recommended or privacy-safe option preselected.
 - In copy: "Recommended for most teams", with a one-click opt-out.
@@ -52,6 +57,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Johnson & Goldstein 2003 (measured registered consent, not donations); Jachimowicz 2019 meta-analysis d=0.68, 58 studies.
 
 ### `decoy-effect` — M
+- Source: https://doi.org/10.1086/208899
 - What: a worse middle option makes another look better.
 - In UI: a middle tier that makes the top tier look worth it.
 - In copy: describe each tier by who it fits.
@@ -59,6 +65,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Huber 1982; Frederick 2014: mostly vanishes with realistic stimuli.
 
 ### `choice-overload` — W/M
+- Source: https://edoc.unibas.ch/20586
 - What: too many options may reduce choice or satisfaction.
 - In UI: highlight one plan; add filters.
 - In copy: "Most teams start with Team."
@@ -66,6 +73,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Iyengar & Lepper 2000; Scheibehenne 2010 meta-analysis mean ≈0; Chernev 2015 moderators. Never cite the jam study alone. Suggest "worth testing" only.
 
 ### `hicks-law` — S, simple stimulus-response only
+- Source: https://doi.org/10.1080/17470215208416600
 - What: choice time grows with the number of options.
 - In UI: shorter menus, grouped actions. Rough guide only.
 - In copy: fewer, clearer labels.
@@ -73,6 +81,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Hick 1952 (U).
 
 ### `social-proof` — M
+- Source: https://doi.org/10.1086/586910
 - What: people follow what others do.
 - In UI: "Most popular" tag.
 - In copy: Bad: "Loved by thousands" → better: "4,812 teams switched last quarter".
@@ -80,6 +89,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Goldstein 2008; Bohner & Schlüter 2014 null result; boomerang effect, Schultz 2007.
 
 ### `scarcity-urgency` — M
+- Source: https://arxiv.org/abs/1907.07032v2
 - What: limited supply or time raises perceived value.
 - In UI: real stock count or real deadline.
 - In copy: "Offer ends 31 Oct" only if it does.
@@ -87,6 +97,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Worchel 1975 (U); Mathur 2019 found them across 11K sites. Avoid in tools and B2B (judgment).
 
 ### `goal-gradient` — S (field)
+- Source: https://business.columbia.edu/sites/default/files-efs/pubfiles/1200/goalgradient.pdf
 - What: effort rises as the goal gets closer.
 - In UI: progress bar on setup.
 - In copy: "2 of 5 done, 3 min left".
@@ -94,6 +105,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Kivetz, Urminsky & Zheng 2006.
 
 ### `endowed-progress` — S/M
+- Source: https://doi.org/10.1086/500480
 - What: a head start raises completion.
 - In UI: checklist begins with "Account created" checked.
 - In copy: "1 of 4 done: account created".
@@ -101,6 +113,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Nunes & Drèze 2006 (U for figures).
 
 ### `zeigarnik-ovsiankina` — W (for memory)
+- Source: https://doi.org/10.1057/s41599-025-05000-w
 - What: unfinished tasks pull people back.
 - In UI: "Resume draft".
 - In copy: "Pick up where you left off".
@@ -108,6 +121,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Ghibellini & Meier 2025 meta-analysis: no memory advantage. The resumption urge is robust, so cite Ovsiankina, not Zeigarnik.
 
 ### `peak-end-rule` — S
+- Source: https://doi.org/10.1111/j.1467-9280.1993.tb00589.x
 - What: experiences are judged by the peak and the end.
 - In UI: satisfying success state; calm cancellation.
 - In copy: end errors and cancellations with the next step and a plain goodbye.
@@ -115,6 +129,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Kahneman 1993 (U); Alaybek 2022 r=.58.
 
 ### `serial-position` — S (list recall)
+- Source: https://doi.org/10.1037/h0045106
 - What: first and last items are remembered best.
 - In UI: key nav at the ends.
 - In copy: lead with the benefit; end with the CTA.
@@ -122,6 +137,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Murdock 1962 (U). Weaker for UI scanning.
 
 ### `von-restorff` — S (memory)
+- Source: https://lawsofux.com/von-restorff-effect/
 - What: the distinct item stands out.
 - In UI: one accent-colored primary CTA.
 - In copy: make the main action the only emphasized one.
@@ -129,6 +145,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: von Restorff 1933 (U).
 
 ### `labor-illusion` — M to S
+- Source: https://doi.org/10.1287/mnsc.1110.1376
 - What: visible effort raises perceived value.
 - In UI: "Checking 412 flights…".
 - In copy: name the real work and count.
@@ -136,6 +153,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Buell & Norton 2011; Buell 2017 field study.
 
 ### `ikea-effect` — S/M
+- Source: https://doi.org/10.1016/j.jcps.2011.08.002
 - What: people value what they helped build.
 - In UI: co-built setup, customizable template.
 - In copy: "Make it yours" after real choices.
@@ -143,6 +161,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Norton 2012; Sarstedt 2017.
 
 ### `commitment-consistency` — M
+- Source: https://doi.org/10.1146/annurev.psych.55.090902.142015
 - What: small commitments lead to larger ones.
 - In UI: a micro-commitment before signup.
 - In copy: "Tell us your goal" before the form.
@@ -150,6 +169,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Cialdini (U).
 
 ### `reciprocity` — M
+- Source: https://doi.org/10.1146/annurev.psych.55.090902.142015
 - What: value given first invites a return.
 - In UI: useful content before the email ask.
 - In copy: give the template, then ask.
@@ -157,6 +177,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Cialdini (U).
 
 ### `reactance` — M
+- Source: https://academic.oup.com/jla/article/13/1/43/6180579
 - What: pressure triggers resistance.
 - In UI: soft upsells, no blocking.
 - In copy: Bad: "You must upgrade now" → better: "Upgrade when you need X".
@@ -164,6 +185,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Brehm (U); Luguri & Strahilevitz 2021 on backlash.
 
 ### `aesthetic-usability` — M
+- Source: https://lawsofux.com/aesthetic-usability-effect/
 - What: attractive interfaces are judged easier to use.
 - In UI: polish on first-use screens.
 - In copy: consistent tone.
@@ -171,6 +193,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: lawsofux (no evidence grade).
 
 ### `cognitive-load` — S (as principle)
+- Source: https://doi.org/10.1207/s15516709cog1202_4
 - What: working memory is limited; chunk and cut.
 - In UI: group fields, one decision per step.
 - In copy: short lines, one job per element.
@@ -178,6 +201,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: Miller 7±2 is misapplied to UI; do not use it as a rule for menu size.
 
 ### `jakobs-law` — S (as heuristic)
+- Source: https://lawsofux.com/jakobs-law/
 - What: users expect your product to work like others they know.
 - In UI: standard patterns for nav, forms, checkout.
 - In copy: use the user's vocabulary.
@@ -185,6 +209,7 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - Cite: heuristic, not an experimental effect.
 
 ### `ego-depletion-decision-fatigue` — W, DO NOT CITE
+- Source: https://doi.org/10.1177/1745691616652873
 - What: the idea that willpower or decision quality depletes.
 - In UI: none. Do not use as a reason.
 - In copy: none.
@@ -207,11 +232,23 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 ## Copy framing rules
 
 - Gain frame for prevention and adoption (Gallagher & Updegraff 2012, small effect r≈.08). Use a loss frame only for real, specific, user-owned losses. Never shame.
+  - id: `framing-gain-frame`
+  - Source: https://doi.org/10.1007/s12160-011-9308-7
 - Precise numbers with source and denominator. Use the frame the user cares about, never the one that hides the real number.
+  - id: `framing-precise-numbers`
+  - Source: https://doi.org/10.1111/j.1467-9280.2008.02057.x
 - Defaults: only when best for most. Label "Recommended for…". Opt-out in one click.
+  - id: `framing-defaults-labeled`
+  - Source: https://ideas.repec.org/a/cup/bpubpo/v3y2019i02p159-186_00.html
 - Anchor against real alternatives. Show all fees up front (hidden costs: deceptive.design and FTC).
+  - id: `framing-anchor-and-fees`
+  - Source: https://www.deceptive.design/types
 - Social proof: real, recent, named reference group. Never normalize bad behavior.
+  - id: `framing-social-proof-real`
+  - Source: https://doi.org/10.1086/586910
 - Reduce effort: state time and steps ("2 min, 3 questions"). Use exploratory verbs ("Check availability", +17% at Google I/O 2017, U). Start with a real first step done.
+  - id: `framing-reduce-effort`
+  - Source: https://business.columbia.edu/sites/default/files-efs/pubfiles/1200/goalgradient.pdf
 
 ## Pitfalls
 
@@ -236,4 +273,3 @@ For tools and B2B products, lean on cognitive load, defaults, progress and endin
 - https://arxiv.org/abs/1907.07032v2
 - https://academic.oup.com/jla/article/13/1/43/6180579
 - https://www.lw.com/en/insights/eighth-circuit-vacates-ftc-click-to-cancel-rule
-- https://pmc.ncbi.nlm.nih.gov/articles/PMC3397368

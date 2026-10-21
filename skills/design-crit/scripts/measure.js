@@ -284,7 +284,9 @@
         const fgc = over([c[0], c[1], c[2], c[3] * effOpacity(el)], bg.rgb);
         const ratio = ratioOf(fgc, bg.rgb);
         const required = large ? 3 : 4.5;
-        if (ratio < required && !isDisabled(el)) {
+        if (ratio <= 1.1) {
+          if (!isDisabled(el)) contrastUnknown.push({ el, text: clip(text, 60), reason: 'fg and bg resolve to nearly the same color; the real background is probably painted by a sibling, pseudo-element or image', rect });
+        } else if (ratio < required && !isDisabled(el)) {
           contrast.push({ el, text: clip(text, 60), fg: hex(fgc), bg: hex(bg.rgb), ratio: (Math.round(ratio * 100) / 100 >= required ? Math.floor(ratio * 100) : Math.round(ratio * 100)) / 100, required, large, rect });
         }
       }

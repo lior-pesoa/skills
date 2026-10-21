@@ -21,10 +21,14 @@ node <skill-dir>/scripts/capture.cjs <url> shots/home-1440-dark.png  1440 900 da
 - It uses the installed Chrome (`channel: "chrome"`); without Chrome, run `npx playwright install chromium` and remove the channel.
 - Captures are at device pixel ratio 1, so `scale` is 1 and measurement rects map 1:1 onto the image.
 - No Node? Use the browser tools available (e.g. Claude in Chrome: resize the window, scroll, take screenshots), and note the method.
+- Flags: `node capture.cjs <url> <out.png> <w> <h> <light|dark> [measure.json] [--stitch] [--at=<y>] [--settle=<ms>] [--step=<ms>] [--no-hide-fixed]`
+- Full-page shot blank where content clearly belongs (scroll-reveal pages): recapture with `--stitch`. It scrolls one screenful at a time, hides fixed/sticky bars after the first frame, and stitches with ffmpeg. If a section is still blank, add a viewport shot of it with `--at=<y>` as its own screen. Content that reveals in stages (faded rows, half-drawn numerals) needs a longer wait: `--settle=2000`.
+- Sticky or fixed UI (bottom CTA bars, cookie banners, floating buttons): capture one mid-scroll viewport per width with `--at=<y>` (e.g. `--at=1200`) as `<screen>-<w>-<theme>-sticky.png`. Part of the medium set. Many sticky bars only appear after you scroll past the hero, so they won't be in any full-page or stitched shot; `--at` is the only way to show them.
+- If light and dark come out identical, note "light-only" (or "dark-only") in coverage and skip the other theme at other widths.
+- Clean up when the run is done: delete `<scratchpad>/pw`. Use absolute paths in shell commands (some environments block `cd` + relative-path deletes).
 - To look closely, crop: `ffmpeg -loglevel error -y -i in.png -vf "crop=W:H:X:Y" out.png` (more reliable than `sips --cropOffset`).
 
-**3. Look at it live.** With a browser tool, open the page and do what a user does:
-- Tab through the page from the top. Note where focus is invisible, lost or in the wrong order.
+**3. Look at it live.** With a browser tool, open the page and do what a user does. The keyboard and focus pass belongs to the a11y specialist (it drives the page with Playwright using the same `NODE_PATH` install); you do the rest:
 - Hover and press the main actions. Note missing feedback.
 - Force states when you can reach them: empty (new account, cleared data), loading (throttle the network), error (bad input, offline), long text (paste a 300-character name). Capture each one you reach as `-<state>`.
 - At `high`: 200% zoom and 320px width (reflow).
