@@ -41,6 +41,11 @@ def fail(msg):
     sys.exit(2)
 
 
+def rich(value):
+    """Escaped text with `backtick` spans shown as code."""
+    return re.sub(r"`([^`\n]+)`", r"<code>\1</code>", esc(value))
+
+
 def esc(value):
     return html.escape("" if value is None else str(value), quote=True)
 
@@ -162,6 +167,11 @@ def view(img, width, height, region=None, tier=None, label="", marker=None, cap=
         pad = pad_for(width, height, scale)
         cx, cy = max(0, x - pad), max(0, y - pad)
         cw, ch = min(width, x + w + pad) - cx, min(height, y + h + pad) - cy
+        # Very wide, short regions make unreadable slivers: grow the crop to at least 1:3.
+        min_h = min(height, cw / 3)
+        if ch < min_h:
+            cy = max(0, min(height - min_h, y + h / 2 - min_h / 2))
+            ch = min_h
     else:
         cx, cy, cw, ch = 0, 0, width, height
     pos_x = cx / (width - cw) * 100 if width > cw else 0
@@ -292,7 +302,7 @@ def render(data, base, inline, fragment=False):
                     scr["img"], scr["w"], scr["h"], clamp_region(w["region"], scr["w"], scr["h"]),
                     label="%s, %s" % (scr["label"], w.get("title") or ""), cap=200, scale=scr["scale"])
             add('<li class="%s">%s<div><h3>%s</h3><p>%s</p></div></li>' % (
-                "has-media" if media else "", media, esc(w.get("title")), esc(w.get("why"))))
+                "has-media" if media else "", media, esc(w.get("title")), rich(w.get("why"))))
         add('</ul></section>')
 
     # 4. Notes by tier
@@ -392,7 +402,7 @@ def note_card(x, images, marker_ids):
     num_html = ('<a class="num marker-%s" href="#marker-%s" aria-label="Note %s, show on screen">%s</a>'
                 % (tier, aid, nid, nid) if has_marker
                 else '<span class="num marker-%s">%s</span>' % (tier, nid))
-    fields = "".join('<dt>%s</dt><dd>%s</dd>' % (k, esc(n.get(f)))
+    fields = "".join('<dt>%s</dt><dd>%s</dd>' % (k, rich(n.get(f)))
                      for k, f in (("What", "what"), ("Effect", "effect"), ("Fix", "fix")) if n.get(f))
 
     pr = n.get("principle") if isinstance(n.get("principle"), dict) else {}
