@@ -143,7 +143,7 @@ Evidence labels: widely cited (3+ independent), single source, inference. Source
 - Why it reads generic: decorative punctuation and labels.
 - Test: remove them. Is anything lost?
 - Instead: plain verb+object labels.
-- Evidence: single source — FD
+- Evidence: inference — our observation
 
 ### `placeholder-leak`
 - Looks like: [Your Name], 2025-XX-XX, lorem text.
@@ -189,7 +189,7 @@ Evidence labels: widely cited (3+ independent), single source, inference. Source
 - Why it reads generic: false specificity.
 - Test: is there a citation or a way to check it? Never accept an uncited number.
 - Instead: cite source and denominator, or remove.
-- Evidence: strong as a rule (findnewpath CLAUDE.md:9)
+- Evidence: strong as a rule (no number without a source)
 
 ### `regression-to-generic`
 - Looks like: a specific fact replaced by a generic positive claim.

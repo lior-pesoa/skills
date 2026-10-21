@@ -8,7 +8,6 @@ The brief (including voice, if the project has a voice doc), the surface type, s
 ## Load
 - `references/anti-slop-copy.md` — tells, greps and density thresholds. Check Claude's current tics first.
 - `references/biases.md` — for framing (defaults, anchoring, loss vs gain, social proof, progress) and its review checks. Cite with the evidence grade.
-- If the `articulate` skill is installed, its error-message, CTA and microcopy sections are a good second reference.
 
 ## Check
 1. **One job per element.** Does the headline say what this is and who it's for? Does each button say what happens, as verb + object ("Create project", not "Submit")? Does the same action keep the same name through the flow ("Publish" → "Published")?
