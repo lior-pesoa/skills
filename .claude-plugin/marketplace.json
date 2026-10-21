@@ -1,0 +1,12 @@
+{
+  "name": "lior-pesoa",
+  "owner": { "name": "Lior Pesoa", "url": "https://www.liorpesoa.com" },
+  "plugins": [
+    {
+      "name": "lior-skills",
+      "source": "./",
+      "description": "Agent skills by Lior Pesoa. First up: design-crit, a design critique of rendered web and iOS screens with an annotated crit page.",
+      "version": "0.1.0"
+    }
+  ]
+}

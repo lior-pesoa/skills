@@ -1,0 +1,9 @@
+{
+  "name": "lior-skills",
+  "version": "0.1.0",
+  "description": "Agent skills by Lior Pesoa. First up: design-crit, a design critique of rendered web and iOS screens with an annotated crit page.",
+  "author": { "name": "Lior Pesoa", "url": "https://www.liorpesoa.com" },
+  "homepage": "https://www.liorpesoa.com/library",
+  "repository": "https://github.com/lior-pesoa/skills",
+  "license": "MIT"
+}
