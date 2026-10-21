@@ -3,7 +3,7 @@ name: design-crit
 description: Design crit of an existing, rendered UI (web or iOS) the way a senior UX/UI designer gives one — looks at real screenshots, grounds every note in a named principle, pattern, bias or the project's own design system, cuts taste-only and generic notes, and delivers a crit page with annotated screenshots. Use when the user asks to review, critique or give design feedback on screens, a page, a flow, a PR's UI changes, or an iOS app. Not for building or changing UI (use a design/build skill), and not for code bugs (use /code-review).
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
   author: Lior Pesoa
 argument-hint: "[low|medium|high|max] [visual|a11y|copy] [<url>|<route>|<ios scheme>|<image paths>] [--fix]"
 ---
