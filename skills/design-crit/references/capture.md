@@ -6,20 +6,22 @@ Screenshots are the evidence. Get them clean, name them `<screen>-<size>-<theme>
 
 **1. Get a URL.** Use the one given. Otherwise find the dev command in `package.json` (`dev`, `start`), check whether a server is already listening (`lsof -iTCP -sTCP:LISTEN -n -P | grep node`) and reuse it. If you must start one, run it in the background, note how to stop it, and stop it before you finish.
 
-**2. Screenshots.** Prefer the Playwright CLI with the installed Chrome (no browser download):
+**2. Screenshots.** Use `scripts/capture.cjs`. It scrolls the whole page before the full-page shot, so lazy-loaded images and scroll-triggered content render (the Playwright CLI's `screenshot --full-page` doesn't scroll, and leaves holes where lazy images should be). It can also run the measurement in the same page load.
 
 ```sh
-npx -y playwright@1.56.1 screenshot --channel chrome --full-page \
-  --viewport-size=390,844 --color-scheme=light  <url> shots/home-390-light.png
-npx -y playwright@1.56.1 screenshot --channel chrome --full-page \
-  --viewport-size=1440,900 --color-scheme=dark  <url> shots/home-1440-dark.png
+mkdir -p <scratchpad>/pw && (cd <scratchpad>/pw && npm i -s playwright@1.56.1)   # once per session
+export NODE_PATH=<scratchpad>/pw/node_modules
+node <skill-dir>/scripts/capture.cjs <url> shots/home-390-light.png 390 844 light measure-390.json
+node <skill-dir>/scripts/capture.cjs <url> shots/home-390-dark.png  390 844 dark
+node <skill-dir>/scripts/capture.cjs <url> shots/home-1440-light.png 1440 900 light measure-1440.json
+node <skill-dir>/scripts/capture.cjs <url> shots/home-1440-dark.png  1440 900 dark
 ```
 
 - `medium` set: 390 and 1440, light and dark. `high`: add 768.
-- Add `--wait-for-timeout=1500` for pages with entrance animation or late-loading fonts.
-- Without `--channel chrome` Playwright needs `npx playwright install chromium` first.
-- Full-page screenshots are captured at device pixel ratio 1 unless `--device` is used; record each image's natural size in `screens[]`.
-- No Playwright? Use the browser tools available (e.g. Claude in Chrome: resize the window, take screenshots), and note the method.
+- It uses the installed Chrome (`channel: "chrome"`); without Chrome, run `npx playwright install chromium` and remove the channel.
+- Captures are at device pixel ratio 1, so `scale` is 1 and measurement rects map 1:1 onto the image.
+- No Node? Use the browser tools available (e.g. Claude in Chrome: resize the window, scroll, take screenshots), and note the method.
+- To look closely, crop: `ffmpeg -loglevel error -y -i in.png -vf "crop=W:H:X:Y" out.png` (more reliable than `sips --cropOffset`).
 
 **3. Look at it live.** With a browser tool, open the page and do what a user does:
 - Tab through the page from the top. Note where focus is invisible, lost or in the wrong order.
@@ -27,7 +29,7 @@ npx -y playwright@1.56.1 screenshot --channel chrome --full-page \
 - Force states when you can reach them: empty (new account, cleared data), loading (throttle the network), error (bad input, offline), long text (paste a 300-character name). Capture each one you reach as `-<state>`.
 - At `high`: 200% zoom and 320px width (reflow).
 
-**4. Measure.** Run `scripts/measure.js` in the page at each width (via the browser tool's run-JavaScript, or Playwright `page.evaluate`). It returns contrast failures, small targets, unnamed controls, images without alt, small text, headings and horizontal overflow, each with a document rect in CSS px. To place a finding on a full-page screenshot: region = rect × (image width ÷ viewport width).
+**4. Measure.** `capture.cjs` writes the measurement when given a JSON path. Otherwise run `scripts/measure.js` in the page at each width (via the browser tool's run-JavaScript, or Playwright `page.evaluate`). It returns contrast failures, small targets, unnamed controls, images without alt, small text, headings and horizontal overflow, each with a document rect in CSS px. To place a finding on a full-page screenshot: region = rect × (image width ÷ viewport width).
 
 ## iOS (SwiftUI, UIKit, Expo)
 

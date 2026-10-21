@@ -208,7 +208,7 @@ def as_list(value):
     return value if isinstance(value, list) else []
 
 
-def render(data, base, inline):
+def render(data, base, inline, fragment=False):
     images = Images(base, inline)
     screens = {}
     for s in as_list(data.get("screens")):
@@ -348,7 +348,11 @@ def render(data, base, inline):
 
     with open(CSS_PATH, "r", encoding="utf-8") as fh:
         css = fh.read()
-    title = "Design crit: %s" % (data.get("target") or "")
+    title = data.get("title") or "Design crit %s" % (data.get("date") or "")
+    if fragment:
+        # For hosts that wrap the page in their own document skeleton (e.g. claude.ai Artifacts).
+        return '<title>%s</title>\n<style>\n%s\n%s\n</style>\n<main class="page">\n%s\n</main>\n' % (
+            esc(title), css, images.css(), "\n".join(parts))
     return ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             '<meta name="color-scheme" content="light dark">\n'
@@ -451,6 +455,8 @@ def main():
     ap.add_argument("crit", help="path to crit.json")
     ap.add_argument("-o", "--output", help="output path (default: crit.html next to crit.json)")
     ap.add_argument("--inline", action="store_true", help="embed images as base64 data URIs")
+    ap.add_argument("--fragment", action="store_true",
+                    help="omit doctype/html/head/body, for hosts that add their own skeleton")
     args = ap.parse_args()
 
     crit_path = os.path.abspath(args.crit)
@@ -460,7 +466,7 @@ def main():
     if not os.path.isfile(CSS_PATH):
         fail("stylesheet not found: %s" % CSS_PATH)
 
-    doc = render(data, base, args.inline).encode("utf-8")
+    doc = render(data, base, args.inline, args.fragment).encode("utf-8")
     with open(out_path, "wb") as fh:
         fh.write(doc)
     if args.inline and len(doc) > INLINE_LIMIT:

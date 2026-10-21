@@ -44,7 +44,9 @@ No docs? Infer the brief from the product itself and mark `brief_source: "inferr
 
 Load `references/capture.md` and follow the web or iOS procedure. Save into the run folder (`<project>/.design-crit/<slug>/<YYYY-MM-DD-HHMM>/shots/`). Default set at `medium`: phone and desktop (web) or the device's default size (iOS), light and dark, plus the states listed in capture.md.
 
-**Capture gate.** Look at every screenshot before using it. Blank, black, half-loaded, cookie-banner-covered, wrong screen, or wrong size → recapture once; if it still fails, drop it and list it under `not_captured`.
+**Capture gate.** Look at every screenshot before using it. Blank, black, half-loaded, cookie-banner-covered, wrong screen, or wrong size → recapture once; if it still fails, drop it and list it under `not_captured`. An empty area where content clearly belongs (an image slot, an art panel, a chart) is a capture failure until proven otherwise: check the source for the asset and recapture after scrolling before treating it as a design problem.
+
+Write the brief, capture list, measurement highlights and your first look (Step 3) into `<run>/brief.md`. Specialists read it from there.
 
 ## Step 3 — Look before reading
 
@@ -60,11 +62,11 @@ Run each specialist as a separate subagent when the Agent tool is available (in 
 | a11y | `specialists/a11y.md` | measured contrast, targets, text size, labels, focus, Dynamic Type |
 | copy | `specialists/copy.md` | labels, CTAs, errors, empty states, framing, copy slop |
 
-Each returns up to 6 candidate notes in the `crit-format.md` note shape (without `id`), plus up to 3 "working" items.
+Each writes its result to `<run>/candidates-<specialist>.json` (`{"notes": [...], "working": [...], "questions": [...], "coverage": "..."}`; up to 6 notes in the `crit-format.md` note shape without `id`, up to 3 working items) and keeps scratch crops in `<run>/work-<specialist>/`. Tell them the exact file path.
 
 ## Step 5 — Director pass
 
-Load `specialists/director.md` and run it as one fresh subagent (or yourself, sequentially, if no Agent tool). It cuts, sharpens, merges and ranks. Maximum two rounds; a second round needs a named reason. It returns the final notes and working items.
+Load `specialists/director.md` and run it as one fresh subagent (or yourself, sequentially, if no Agent tool). It cuts, sharpens, merges and ranks. Maximum two rounds; a second round needs a named reason. It writes `<run>/director.json` (`notes`, `working`, `direction`, `questions` with `note` as a 1-based index into its notes, `cut_summary`).
 
 ## Step 6 — Write the crit
 
@@ -72,7 +74,7 @@ Load `specialists/director.md` and run it as one fresh subagent (or yourself, se
 2. If an earlier run exists for this slug, read its `crit.json` only now (never before Step 5): mark each old note fixed / partial / open using the new screenshots only, and fill `previous`.
 3. Render: `python3 <skill-dir>/scripts/render.py <run>/crit.json`.
 4. Deliver the page:
-   - If the Artifact tool is available, publish `crit.html` with its `shots/` as supporting files and give the link.
+   - If the Artifact tool is available, render again with `--fragment` (the host adds its own document skeleton), publish that file with its `shots/` as supporting files, and give the link.
    - Otherwise tell the user the local path to `crit.html`.
 5. In chat: one line on the overall read, the counts (Must / Should / Polish), the link or path. Then the questions (2–4, each tied to a note, each with concrete options) as the last thing in the message. Nothing after the questions.
 

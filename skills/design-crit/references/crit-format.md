@@ -9,6 +9,7 @@ Run folder: `<project>/.design-crit/<slug>/<YYYY-MM-DD-HHMM>/` holding `crit.jso
   "version": 1,
   "target": "my-portfolio · / (homepage)",   // what was reviewed, human-readable
   "slug": "home",                               // stable across runs of the same target
+  "title": "Homepage crit",                     // optional page name (2-4 words, no colon explainer)
   "date": "2026-10-21",
   "effort": "medium",                           // low | medium | high | max
   "surface": "persuade",                        // persuade | operate | read | experience
