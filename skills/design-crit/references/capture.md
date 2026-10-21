@@ -35,43 +35,54 @@ node <skill-dir>/scripts/capture.cjs <url> shots/home-1440-dark.png  1440 900 da
 
 Build output goes in the session scratchpad (`<scratchpad>/dd`) and is deleted when you're done. Never create build folders in the repo or the home directory.
 
-**1. Build and boot.**
-```sh
-xcrun simctl list devices available | grep -E "iPhone (1[5-9]|2[0-9])"   # pick a current iPhone
-xcrun simctl boot "<device>" ; open -a Simulator
-xcodebuild -scheme <Scheme> -destination 'platform=iOS Simulator,name=<device>' \
-  -derivedDataPath <scratchpad>/dd build
-xcrun simctl install booted <scratchpad>/dd/Build/Products/Debug-iphonesimulator/<App>.app
-xcrun simctl launch booted <bundle-id>
-```
-Expo: `npx expo run:ios --device "<device>"` (or use a dev build already installed). Find the bundle id in `app.json`/`app.config.*` or the Xcode project.
+Use a simulator of your own so you don't disturb devices other sessions or the user rely on, and delete it at the end.
 
-**2. Clean status bar** (so screenshots don't carry noise):
+**1. Build.** A Release build runs without a dev server (Metro), which keeps the capture simple.
 ```sh
-xcrun simctl status_bar booted override --time 9:41 --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3
+xcodebuild -workspace ios/<App>.xcworkspace -scheme <Scheme> -configuration Release \
+  -sdk iphonesimulator -derivedDataPath <scratchpad>/dd CODE_SIGNING_ALLOWED=NO build
 ```
+- Find the bundle id in `app.json`/`app.config.*` or the Xcode project.
+- Build fails on files missing from `node_modules`: the dependencies are out of sync. Restore them with the project's install command and check that no tracked file changed (`git status`). Don't run `pod install` unless asked; it can change tracked files.
+- React Native/Expo, JS bundle step fails because the working tree has someone's unfinished change: don't touch their work. Review the last commit instead: finish the native build with `SKIP_BUNDLING=1`, then bundle the committed JS from a scratch copy and put it in the app:
+  ```sh
+  git archive HEAD | tar -x -C <scratchpad>/head && cp .env.local <scratchpad>/head/ 2>/dev/null
+  ln -s "$PWD/node_modules" <scratchpad>/head/node_modules
+  (cd <scratchpad>/head && npx expo export:embed --platform ios --dev false --entry-file index.js \
+     --bundle-output <app>/main.jsbundle --assets-dest <app>)
+  ```
+  Say in the brief which commit was reviewed and that uncommitted work wasn't.
 
-**3. Reach each screen.** Prefer deep links (`xcrun simctl openurl booted <scheme>://path`). Otherwise navigate with the computer-use or simulator tools available, or a UI test that taps through. Note any screen you couldn't reach.
-
-**4. Screenshots.**
+**2. Boot and install** on a dedicated device, with a clean status bar:
 ```sh
-xcrun simctl ui booted appearance light
-xcrun simctl io booted screenshot shots/home-iphone-light.png
-xcrun simctl ui booted appearance dark
-xcrun simctl io booted screenshot shots/home-iphone-dark.png
-xcrun simctl ui booted content_size accessibility-extra-extra-extra-large   # largest Dynamic Type
-xcrun simctl io booted screenshot shots/home-iphone-light-ax5.png
-xcrun simctl ui booted content_size large                                   # reset to default
+U=$(xcrun simctl create "design-crit iPhone" com.apple.CoreSimulator.SimDeviceType.iPhone-17 <runtime-id>)
+xcrun simctl boot $U && xcrun simctl bootstatus $U -b
+xcrun simctl status_bar $U override --time 9:41 --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3
+xcrun simctl install $U <scratchpad>/dd/Build/Products/Release-iphonesimulator/<App>.app
+xcrun simctl launch $U <bundle-id>
 ```
-- `medium`: light, dark, and the largest Dynamic Type size on the main screens.
-- `high`: add `xcrun simctl ui booted increase_contrast enabled` and states (empty, loading, error, long text).
-- Screenshots are at device pixels (e.g. 1179×2556). Long screens: capture each scroll position as its own screen.
+(`xcrun simctl list runtimes` and `list devicetypes` give the ids.)
+
+**3. Reach each screen.** Prefer deep links: `xcrun simctl openurl $U <scheme>://<route>`. Recent iOS asks "Open in <App>?" first; confirm it with Return:
+`osascript -e 'tell application "Simulator" to activate' -e 'delay 0.5' -e 'tell application "System Events" to key code 36'` (the terminal needs Accessibility permission). Otherwise navigate with computer-use tools or a UI test that taps through. Note any screen you couldn't reach.
+
+**4. Screenshots.** Wait for entrance animations to finish (6–9 s after launch is typical; typing or rotating content needs the full cycle), then check each shot for mid-animation frames.
+```sh
+xcrun simctl ui $U appearance light ; xcrun simctl io $U screenshot shots/home-iphone-light.png
+xcrun simctl ui $U appearance dark  ; xcrun simctl io $U screenshot shots/home-iphone-dark.png
+```
+- Rotating or crossfading content (hero carousels, typing captions): take a burst of 12–16 shots about 0.6 s apart and keep a frame from the longest run of identical brightness — that's the scene at rest. One mid-fade frame makes everything look dimmed and produces false contrast notes. Quick brightness per frame: `ffmpeg -loglevel error -i f.png -vf "crop=W:H:X:Y,scale=1:1" -f rawvideo -pix_fmt rgb24 - | od -An -tu1`.
+- Largest Dynamic Type: set it, **relaunch the app**, navigate back, then capture. A live switch catches half-updated layouts.
+  `xcrun simctl ui $U content_size accessibility-extra-extra-extra-large` … `content_size large` to reset.
+- `medium`: light, dark, and the largest Dynamic Type size on the main screens. If light and dark render the same, note it (often intentional for always-dark screens).
+- `high`: add `xcrun simctl ui $U increase_contrast enabled` and states (empty, loading, error, long text).
+- Screenshots are device pixels (1206×2622 on iPhone 17, scale 3). Long screens: capture each scroll position as its own screen.
 
 **5. Measure.** iOS has no DOM. Use what exists:
 - If the project has a UI test target (or you can add a throwaway one in the scratchpad), `XCUIApplication().performAccessibilityAudit()` (iOS 17+) reports contrast, hit regions, Dynamic Type clipping and missing labels.
-- Otherwise measure from the screenshot: sample text and background colors from the image and compute the WCAG ratio; measure tap targets in points (pixels ÷ scale; 3× on current iPhones). Mark these notes `measured: "from screenshot"`.
+- Otherwise measure from the screenshot: sample text and background colors from the image and compute the WCAG ratio; measure tap targets in points (pixels ÷ scale). Mark these notes `measured: "from screenshot"`.
 
-**6. Clean up.** `xcrun simctl status_bar booted clear`, reset appearance and content size, delete `<scratchpad>/dd`.
+**6. Clean up.** `xcrun simctl shutdown $U && xcrun simctl delete $U`, and delete `<scratchpad>/dd` and any scratch copy of the source.
 
 ## Static input (images, Figma frames)
 
