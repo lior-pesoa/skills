@@ -1,0 +1,161 @@
+{
+  "version": 1,
+  "target": "example-app · / (homepage)",
+  "slug": "home",
+  "date": "2026-10-21",
+  "effort": "medium",
+  "surface": "persuade",
+  "brief": "Homepage for a small scheduling tool. Visitors are freelancers comparing tools; the one job is to get them to start a free trial. The committed direction is calm and plain: one headline, one primary action, proof below the fold.",
+  "brief_source": "inferred",
+  "method": "lead + visual + a11y + copy, director pass",
+  "degraded": null,
+  "coverage": {
+    "captured": ["390 light", "1440 light", "keyboard pass"],
+    "not_captured": ["dark mode", "hover states", "error state"]
+  },
+  "direction": "The page asks for a trial before it shows what the product does; move one concrete product view above the fold before polishing anything else.",
+  "screens": [
+    {
+      "id": "home-390-light",
+      "label": "Home · 390 · light",
+      "image": "shots/home-390-light.png",
+      "width": 1170,
+      "height": 2400
+    },
+    {
+      "id": "home-1440-light",
+      "label": "Home · 1440 · light",
+      "image": "shots/home-1440-light.png",
+      "width": 2880,
+      "height": 1800
+    }
+  ],
+  "working": [
+    {
+      "title": "One primary action per viewport",
+      "why": "The trial button is the only filled control on the first screen, so the next step is never in doubt. Keep secondary links as text.",
+      "screen": "home-390-light",
+      "region": { "x": 72, "y": 700, "w": 488, "h": 140 }
+    },
+    {
+      "title": "Headline length fits the measure",
+      "why": "At 1440 the headline wraps at about 50 characters, which reads in one pass. Don't widen the column."
+    }
+  ],
+  "notes": [
+    {
+      "id": 1,
+      "tier": "must",
+      "title": "Subheading text fails contrast",
+      "screen": "home-390-light",
+      "region": { "x": 72, "y": 460, "w": 928, "h": 140 },
+      "what": "The subheading is light gray on near-white. The copy deck also renders a raw tag here: <script>alert(1)</script>",
+      "principle": {
+        "rule_id": "contrast-text",
+        "name": "Text contrast (WCAG 2.2 SC 1.4.3)",
+        "source": "W3C WCAG 2.2",
+        "url": "https://www.w3.org/TR/WCAG22/#contrast-minimum",
+        "evidence": "rule"
+      },
+      "effect": "Low-vision visitors and anyone outdoors on a phone can't read the line that explains the product.",
+      "fix": "Set the subheading to #5F5F5F or darker on #EEEEEE (5.6:1).",
+      "specialist": "a11y",
+      "verdict": "confirmed",
+      "measured": "2.9:1 (#9A9A9A on #EEEEEE)",
+      "after_image": null
+    },
+    {
+      "id": 2,
+      "tier": "must",
+      "title": "Trial button sits below the fold at 1440",
+      "screen": "home-1440-light",
+      "region": { "x": 240, "y": 720, "w": 400, "h": 120 },
+      "what": "The primary action is 840px down on a 900px viewport and shares the line with the fold.",
+      "principle": {
+        "rule_id": "primary-action-visible",
+        "name": "Visibility of the primary action",
+        "source": "Nielsen Norman Group",
+        "url": "https://www.nngroup.com/articles/scrolling-and-attention/",
+        "evidence": "S"
+      },
+      "effect": "Most visitors decide from the first screen; a half-visible button reads as decoration.",
+      "fix": "Cut the hero top padding from 200px to 96px so the button lands near 620px.",
+      "specialist": "visual",
+      "verdict": "confirmed",
+      "after_image": null
+    },
+    {
+      "id": 3,
+      "tier": "should",
+      "title": "Band section has no heading",
+      "screen": "home-390-light",
+      "region": { "x": 0, "y": 1100, "w": 1170, "h": 400 },
+      "what": "The gray band carries three claims but no heading, so it is skipped by screen-reader heading navigation.",
+      "principle": {
+        "rule_id": "headings-labels",
+        "name": "Headings and labels (WCAG 2.2 SC 2.4.6)",
+        "source": "W3C WCAG 2.2",
+        "url": "https://www.w3.org/TR/WCAG22/#headings-and-labels",
+        "evidence": "rule"
+      },
+      "effect": "Keyboard and screen-reader users can't jump to the proof section.",
+      "fix": "Add an h2 \"Why freelancers switch\" at the top of the band.",
+      "specialist": "a11y",
+      "verdict": "confirmed",
+      "after_image": null
+    },
+    {
+      "id": 4,
+      "tier": "should",
+      "title": "Side card competes with the headline",
+      "screen": "home-1440-light",
+      "region": { "x": 1900, "y": 300, "w": 740, "h": 680 },
+      "what": "The testimonial card is the largest block on the first screen and sits level with the headline.",
+      "principle": {
+        "rule_id": "visual-hierarchy",
+        "name": "Visual hierarchy",
+        "source": "Interaction Design Foundation",
+        "url": "https://www.interaction-design.org/literature/topics/visual-hierarchy",
+        "evidence": "M"
+      },
+      "effect": "The eye may land on the quote first and miss what the product is.",
+      "fix": "Drop the card to 520px wide and align its top with the subheading, not the headline.",
+      "specialist": "visual",
+      "verdict": "plausible",
+      "after_image": null
+    },
+    {
+      "id": 5,
+      "tier": "polish",
+      "title": "Card inset is tighter than the page gutter",
+      "screen": "home-1440-light",
+      "region": { "x": 0, "y": 1100, "w": 2880, "h": 300 },
+      "what": "Text in the band starts 16px from its edge while the page uses 24px.",
+      "principle": {
+        "rule_id": "spacing-scale",
+        "name": "Consistent spacing scale",
+        "source": "Material Design 3",
+        "url": "https://m3.material.io/foundations/layout/understanding-layout/spacing",
+        "evidence": "W"
+      },
+      "effect": "A small misalignment that makes the band feel pasted in.",
+      "fix": "Use the 24px token for the band's inline padding.",
+      "specialist": "visual",
+      "verdict": "confirmed",
+      "after_image": "shots/home-1440-light.png"
+    }
+  ],
+  "questions": [
+    {
+      "q": "Is the testimonial card meant to be the first thing people read?",
+      "note": 4,
+      "options": ["Yes, social proof leads", "No, the headline leads"]
+    },
+    {
+      "q": "Should the trial button stay on one line at 390?",
+      "note": 2,
+      "options": ["Yes, shorten the label", "No, allow two lines"]
+    }
+  ],
+  "previous": { "date": "2026-10-14", "fixed": [6, 7], "partial": [2], "open": [1, 3] }
+}
