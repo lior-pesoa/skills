@@ -69,6 +69,32 @@ What it does:
 - Python 3, standard library only.
 - An account with an AI avatar video tool, and screen recordings of your product from a real phone.
 
+## delegate
+
+A working mode for coding agents: the main agent plans, solves the hard logic and reviews every diff, and subagents on cheaper models write the code from precise specs. A strong model (Opus in Claude Code) gets the code where taste matters; a fast one (Sonnet) gets boilerplate, tests and mechanical edits.
+
+It only delegates work that splits cleanly. Every handoff loses context and adds latency, so changes that are tightly coupled to reasoning the main agent just did, debugging, and iterative UI work stay with the main agent. This follows Anthropic's advice on [when to fold subagents into your main agent loop](https://claude.com/resources/articles/building-agents-when-to-fold-subagents-into-your-main-agent-loop): split along clean interfaces, not along roles.
+
+How it works:
+1. **Plan.** The main agent reads the code and solves the hard parts itself: algorithms, concurrency, invariants. "Handle the race condition appropriately" never goes in a spec.
+2. **Split.** Work becomes packages that can each be built and reviewed on their own, ideally touching different files, each assigned a model.
+3. **Spec.** Every package gets a self-contained spec: context, goal, files to touch and not touch, interfaces, invariants, enumerated edge cases, acceptance criteria with the exact verify command.
+4. **Dispatch.** Independent packages run in parallel.
+5. **Review.** The main agent reads the real diff against the spec, never the agent's summary. It checks for scope creep, "improved" reference code and the most common failure: the happy path built, the edge cases skipped.
+6. **Fix.** Findings go back to the same agent, at most two rounds, then it escalates to a stronger model or the main agent takes the package over.
+7. **Verify.** The main agent runs the tests and build itself and reports which model built what and what review caught.
+
+### Use
+
+```
+/delegate                               # or just ask for a feature; it triggers on separable implementation work
+```
+
+### Requirements
+
+- An agent that can start subagents and pick their model. It's written for Claude Code (Agent tool with `model: "opus"` or `"sonnet"`, SendMessage for fix rounds).
+- A git repo, so the main agent can review diffs.
+
 ## Install
 
 With the [skills CLI](https://github.com/vercel-labs/skills):
@@ -76,6 +102,7 @@ With the [skills CLI](https://github.com/vercel-labs/skills):
 ```sh
 npx skills add lior-pesoa/skills --skill design-crit
 npx skills add lior-pesoa/skills --skill ugc-video
+npx skills add lior-pesoa/skills --skill delegate
 ```
 
 As a Claude Code plugin:
@@ -85,7 +112,7 @@ As a Claude Code plugin:
 /plugin install lior-skills@lior-pesoa
 ```
 
-Or copy `skills/design-crit` or `skills/ugc-video` into `~/.claude/skills/`.
+Or copy `skills/design-crit`, `skills/ugc-video` or `skills/delegate` into `~/.claude/skills/`.
 
 ## What's inside
 
@@ -102,6 +129,9 @@ skills/ugc-video/
   references/              script and hook rules, avatar prompts and voice, layout and safe zones, posting
   scripts/                 clip-report.py, build-avatar.py, caption-groups.py
   templates/index.html     the HyperFrames composition
+
+skills/delegate/
+  SKILL.md                 when to delegate, the spec template, review and fix loop
 ```
 
 ## License

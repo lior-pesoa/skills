@@ -1,5 +1,13 @@
 # Changelog
 
+## delegate 0.1.0 · 2026-10-26
+
+First release. The working mode I use for most implementation work.
+
+- Role split: the main agent plans, writes hard logic and reviews; a strong model writes taste-sensitive code, a fast model writes grunt work.
+- Delegates by the shape of the work, not its size: clean interfaces, parallel packages and mechanical work go out; coupled changes, debugging and iterative UI work stay inline.
+- Spec template with enumerated edge cases and acceptance criteria, diff review against the spec, fix rounds to the same agent with a two-round cap and escalation.
+
 ## design-crit 0.2.0 · 2026-10-21
 
 From a cold test run (a fresh agent using only the skill's files) and the first iOS run.
