@@ -95,6 +95,33 @@ How it works:
 - An agent that can start subagents and pick their model. It's written for Claude Code (Agent tool with `model: "opus"` or `"sonnet"`, SendMessage for fix rounds).
 - A git repo, so the main agent can review diffs.
 
+## migrate-to-fable-5-2
+
+A migration pass for prompts and agent setups moving to Claude Fable 5.2 or Claude Mythos 5.2. It follows Anthropic's guide, [Prompting Claude Fable 5.2](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-2), which lists what to change when you carry a prompt, a skill or a harness over from an earlier model.
+
+The API changes in a new model return a 400, so you find them. The changes in this guide don't raise errors: an effort level tuned on another model, a system prompt line that stopped working, a memory file full of old cautions. They show up as cost, slow turns and worse results.
+
+How it works:
+1. **Ask.** Reads the repo first, then asks what it can't find there: the model you're moving from, whether someone watches the agent work, what you've seen on Fable 5.2 so far, and whether to edit or only report.
+2. **Inventory.** Lists every place instructions reach the model: system prompts, `CLAUDE.md`, skills, agent files, memory, notes, tool descriptions and the code that builds requests.
+3. **Effort.** Sets `effort` to `high` explicitly and plans a sweep at `medium` and `xhigh` on your evals. It won't call a level tuned when nothing measured it.
+4. **Audit.** Checks the inventory for nine kinds of leftover from earlier models: standing orders to delegate, a token budget shown to the model, code that edits earlier turns, "treat that answer as done" lines, "don't think" lines, hard style rules, cautions that piled up in memory, requests to write reasoning into the response, and approval rules that are too broad.
+5. **Fix what you saw.** Matches each behavior you observed (early stops, unneeded approvals, silent turns, too many subagents, duplicated code, dense reports, refusals, slow easy requests) to the fix from the guide, with Anthropic's suggested text, its measured effect and its token cost.
+6. **Report.** Findings with file and line, what changed, what it left alone and why, and what to measure next.
+
+It adds a fix only for a behavior someone observed. Each one costs tokens: in Anthropic's testing the finishing text raised output tokens by about 30% and the code-ownership sentence by 70 to 80%. Adding them all up front makes the agent slower and hides which change did what.
+
+### Use
+
+```
+/migrate-to-fable-5-2                   # or describe what changed since you switched; it triggers on the symptoms too
+```
+
+### Requirements
+
+- An agent that reads `SKILL.md` files. There are no scripts to install.
+- It covers prompts and behavior. For the API changes (model IDs, parameters that now return a 400), use Anthropic's [migration guide](https://platform.claude.com/docs/en/models/fable-5-2/migration-guide), or `/claude-api migrate this project to claude-fable-5-2` in Claude Code.
+
 ## Install
 
 With the [skills CLI](https://github.com/vercel-labs/skills):
@@ -103,6 +130,7 @@ With the [skills CLI](https://github.com/vercel-labs/skills):
 npx skills add lior-pesoa/skills --skill design-crit
 npx skills add lior-pesoa/skills --skill ugc-video
 npx skills add lior-pesoa/skills --skill delegate
+npx skills add lior-pesoa/skills --skill migrate-to-fable-5-2
 ```
 
 As a Claude Code plugin:
@@ -112,7 +140,7 @@ As a Claude Code plugin:
 /plugin install lior-skills@lior-pesoa
 ```
 
-Or copy `skills/design-crit`, `skills/ugc-video` or `skills/delegate` into `~/.claude/skills/`.
+Or copy `skills/design-crit`, `skills/ugc-video`, `skills/delegate` or `skills/migrate-to-fable-5-2` into `~/.claude/skills/`.
 
 ## What's inside
 
@@ -132,6 +160,10 @@ skills/ugc-video/
 
 skills/delegate/
   SKILL.md                 when to delegate, the spec template, review and fix loop
+
+skills/migrate-to-fable-5-2/
+  SKILL.md                 questions → inventory → effort → audit → fixes → report
+  references/              leftovers from earlier models and how to find them; observed behaviors and their fixes
 ```
 
 ## License

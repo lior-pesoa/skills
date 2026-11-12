@@ -1,5 +1,14 @@
 # Changelog
 
+## migrate-to-fable-5-2 0.1.0 · 2026-11-12
+
+First release. Written from Anthropic's guide [Prompting Claude Fable 5.2](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-2), as it read on 12 November 2026. Not yet run on a real migration.
+
+- Workflow: ask what the repo can't answer, list every place instructions reach the model, calibrate effort, audit what was carried over, fix observed behaviors, report.
+- Nine kinds of leftover from earlier models, each with search terms, why it misbehaves on Fable 5.2 and what to do.
+- Eight observed behaviors mapped to fixes, with Anthropic's suggested prompt texts quoted, their measured effect, their token cost and when to leave them out.
+- Removal before addition, one fix per observed behavior, and prompt changes shipped to new conversations only.
+
 ## delegate 0.1.0 · 2026-10-26
 
 First release. The working mode I use for most implementation work.

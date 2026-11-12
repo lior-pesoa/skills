@@ -5,8 +5,8 @@
     {
       "name": "lior-skills",
       "source": "./",
-      "description": "Agent skills by Lior Pesoa: design-crit (a design critique of rendered web and iOS screens with an annotated crit page), ugc-video (UGC video ads with an AI avatar over real screen recordings) and delegate (plan and review while cheaper subagents write the code).",
-      "version": "0.2.0"
+      "description": "Agent skills by Lior Pesoa: design-crit (a design critique of rendered web and iOS screens with an annotated crit page), ugc-video (UGC video ads with an AI avatar over real screen recordings), delegate (plan and review while cheaper subagents write the code) and migrate-to-fable-5-2 (move prompts and agent setups to Claude Fable 5.2, following Anthropic's prompting guide).",
+      "version": "0.3.0"
     }
   ]
 }
