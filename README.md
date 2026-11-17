@@ -122,6 +122,32 @@ It adds a fix only for a behavior someone observed. Each one costs tokens: in An
 - An agent that reads `SKILL.md` files. There are no scripts to install.
 - It covers prompts and behavior. For the API changes (model IDs, parameters that now return a 400), use Anthropic's [migration guide](https://platform.claude.com/docs/en/models/fable-5-2/migration-guide), or `/claude-api migrate this project to claude-fable-5-2` in Claude Code.
 
+## cv-interview
+
+An interview that turns an experienced person's career into a strong CV, the way a good recruiter or career coach would. Most people with years of experience undersell themselves: the old CV lists duties, leaves out the numbers, and hides whole roles they took on. This skill asks the questions that draw those out, and never invents a fact or a number.
+
+How it works:
+1. **Set up.** The target role, where they are (still employed, between jobs, changing fields), the market, and which sources it may read.
+2. **Gather before asking.** Reads the old CV, a LinkedIn PDF, a portfolio and documents they share, and keeps a list of each fact with its source. Records someone else wrote are treated as leads to confirm, not facts.
+3. **Draft early.** A full first draft with the gaps marked (`[number?]`, `[your part vs the team's?]`), so they react to something concrete.
+4. **Interview.** Short numbered batches of questions answerable in a line: scale and results, documents that hold the numbers they forgot, the roles a CV hides (leading people, customer work, gaps nobody owned), how they really use each tool, and "could you talk about this for five minutes?"
+5. **Map to the reader.** What a hiring manager reads from each line, which requirement of the target role it answers, and which requirements have no line yet.
+6. **Edit in their voice.** Offers options instead of overwriting, keeps their words, and holds edits until they say "apply".
+7. **Deliver.** Interview notes with a source for every fact, the CV as an editable doc, the CV as .docx and PDF, and a practice list of the questions an interviewer will ask about each line, with what a good answer covers.
+
+The CV rules come from published research on how CVs are read, summarised with sources and evidence strength in `references/cv-rules.md`.
+
+### Use
+
+```
+/cv-interview                           # or ask to rewrite or strengthen a CV; it triggers on that too
+```
+
+### Requirements
+
+- An agent that reads `SKILL.md` files. There are no scripts to install.
+- For the .docx and PDF: a docx or PDF skill, or `pandoc`.
+
 ## Install
 
 With the [skills CLI](https://github.com/vercel-labs/skills):
@@ -131,6 +157,7 @@ npx skills add lior-pesoa/skills --skill design-crit
 npx skills add lior-pesoa/skills --skill ugc-video
 npx skills add lior-pesoa/skills --skill delegate
 npx skills add lior-pesoa/skills --skill migrate-to-fable-5-2
+npx skills add lior-pesoa/skills --skill cv-interview
 ```
 
 As a Claude Code plugin:
@@ -140,7 +167,7 @@ As a Claude Code plugin:
 /plugin install lior-skills@lior-pesoa
 ```
 
-Or copy `skills/design-crit`, `skills/ugc-video`, `skills/delegate` or `skills/migrate-to-fable-5-2` into `~/.claude/skills/`.
+Or copy `skills/design-crit`, `skills/ugc-video`, `skills/delegate`, `skills/migrate-to-fable-5-2` or `skills/cv-interview` into `~/.claude/skills/`.
 
 ## What's inside
 
@@ -164,6 +191,10 @@ skills/delegate/
 skills/migrate-to-fable-5-2/
   SKILL.md                 questions → inventory → effort → audit → fixes → report
   references/              leftovers from earlier models and how to find them; observed behaviors and their fixes
+
+skills/cv-interview/
+  SKILL.md                 set up → gather → draft → interview → map → edit → deliver → practice
+  references/              CV rules with sources, question bank, output formats
 ```
 
 ## License

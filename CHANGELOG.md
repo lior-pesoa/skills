@@ -1,5 +1,15 @@
 # Changelog
 
+## cv-interview 0.1.0 · 2026-11-17
+
+First release. Tested against a simulated candidate with planted traps (numbers only in a deck, a manager's summary that overstated her part, leadership and customer work missing from her CV), with and without the skill.
+
+- Workflow: set up, gather before asking, draft early, interview in numbered batches, map lines to the reader, edit in their voice, deliver, practise.
+- Never fills a gap with a guess; records someone else wrote are confirmed before use; every line must survive five minutes of questions.
+- Hidden roles asked as their own batch, including customer-facing work, which a nearby question missed in testing.
+- Internal numbers offered as options (exact with source, rounded, unmeasured, left out) instead of a yes/no, and results too vague to check are cut.
+- Four outputs: sourced interview notes, an editable CV, .docx and PDF, and an interview practice list with concept checks and what a good answer covers.
+
 ## migrate-to-fable-5-2 0.1.0 · 2026-11-12
 
 First release. Written from Anthropic's guide [Prompting Claude Fable 5.2](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-2), as it read on 12 November 2026. Not yet run on a real migration.
